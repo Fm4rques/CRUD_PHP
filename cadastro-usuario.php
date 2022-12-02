@@ -8,16 +8,27 @@
     <div>
         <div>
         <?php
+        
+        define( 'MYSQL_HOST', 'localhost' );
+        define( 'MYSQL_USER', 'root' );
+        define( 'MYSQL_PASSWORD', '' );
+        define( 'MYSQL_DB_NAME', 'cadastro' );  
+
+
+
         $nome = $_GET["nome"];
         $cpf = $_GET["cpf"];
         $email = $_GET["email"];
+
+       
+        $PDO = new PDO( 'mysql:host=' . MYSQL_HOST . ';dbname=' . MYSQL_DB_NAME, MYSQL_USER, MYSQL_PASSWORD );
+       
+        $sql = "insert into usuarios (nome, cpf, email) values ('{$nome}', '{$cpf}', '{$email}')";
+        $stmt = $PDO->prepare( $sql );
+        $result = $stmt->execute();
+          
     
-        $conexao = mysqli_connect("127.0.0.1", "root", '', "cadastro");
-        $query = mysqli_query($conexao,"insert into usuarios (nome, cpf, email) values ('{$nome}', '{$cpf}', '{$email}')");
-        mysqli_close($conexao);
-   
-    
-    if($query) {
+    if($result) {
         ?>
         <p class="alert-success">
         Nome: <?= $nome; ?>, CPF: <?= $cpf; ?>, E-mail: <?= $email; ?> - Cadastro realizado com sucesso!
